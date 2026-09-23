@@ -22,10 +22,12 @@ public class App extends Application {
         var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
 
         VBox tierList = new VBox();
+        tierList.setMinWidth(800);
+        tierList.setMaxWidth(800);
         tierList.setViewOrder(3);
         AnchorPane anchorPane = new AnchorPane(tierList);
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             TierRow tierRow = new TierRow(anchorPane);
             tierList.getChildren().add(tierRow);
         }

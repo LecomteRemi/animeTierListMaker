@@ -12,14 +12,21 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 
-public class TierRow extends HBox {
+public class TierRow extends FlowPane {
     public Label tierLabel;
     public List<Unit> mediaList;
 
+    private boolean isEndDummyActivated = false;
+    private Label dummy;
+
     public TierRow(AnchorPane anchorPane) {
+        MediaCursor.getInstance().AddTierRow(this);
+        dummy = new Label("dummy");
+
+        dummy.setMinSize(Unit.UNIT_WIDTH, Unit.UNIT_HEIGHT);
         this.mediaList = new ArrayList<Unit>();
         tierLabel = new Label("tier1");
         BackgroundFill background_fill = new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY);
@@ -27,20 +34,14 @@ public class TierRow extends HBox {
         tierLabel.setMinHeight(100);
 
         BackgroundFill background_fill2 = new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY);
+        this.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+
 
         TierRow tierRow = this;
         for (int i = 0; i < 10; i++) {
             Unit media = new Unit("media" + i);
             media.setAnchorPane(anchorPane);
             media.SetRow(tierRow);
-            /*
-             * EventHandler<javafx.scene.input.MouseEvent> eventHandlerBox = new
-             * EventHandler<javafx.scene.input.MouseEvent>() {
-             * 
-             * @Override public void handle(javafx.scene.input.MouseEvent e) { if
-             * (mediaList.contains(media)) { mediaList.remove(media);
-             * tierRow.getChildren().remove(media); } } };
-             */
             media.setMinHeight(100);
             media.setBackground(new Background(background_fill2));
             media.setBorder(new Border(new BorderStroke(null, BorderStrokeStyle.SOLID, null, null)));
@@ -51,10 +52,25 @@ public class TierRow extends HBox {
         this.getChildren().add(tierLabel);
         this.getChildren().addAll(mediaList);
         this.setMinHeight(100);
-        
+
     }
 
-    public void truc() {
-        System.out.println("truc");
+    public void activateEndDummy() {
+        if (!isEndDummyActivated) {
+            isEndDummyActivated = true;
+            this.getChildren().add(dummy);
+        }
+    }
+
+    public void disableEndDummy() {
+        if (isEndDummyActivated) {
+            isEndDummyActivated = false;
+            this.getChildren().remove(dummy);
+        }
+    }
+
+    public void addUnit(Unit unit) {
+        mediaList.add(unit);
+        this.getChildren().add(unit);
     }
 }
