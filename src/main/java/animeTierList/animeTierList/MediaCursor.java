@@ -8,24 +8,24 @@ import javafx.scene.control.Label;
 public class MediaCursor {
     
     private static MediaCursor instance;
-    private List<TierRow> tierRows;
-    private TierRow currentHoveredTierRow;
+    private List<UnitRow> unitRows;
+    private UnitRow currentHoveredUnitRow;
 
-    public TierRow getCurrentHoveredTierRow() {
-        return currentHoveredTierRow;
+    public UnitRow getCurrentHoveredUnitRow() {
+        return currentHoveredUnitRow;
     }
 
     public void checkTierRowsMouseLocation(double x, double y) {
-
-        for (TierRow tierRow : tierRows) {
-            if (tierRow.contains(tierRow.sceneToLocal(x, y))) {
-                if (currentHoveredTierRow != null) {
-                    currentHoveredTierRow.disableEndDummy();
+        currentHoveredUnitRow = null;
+        for (UnitRow unitRow : unitRows) {
+            if (unitRow.getNode().contains(unitRow.getNode().sceneToLocal(x, y))) {
+                if (currentHoveredUnitRow != null) {
+                    currentHoveredUnitRow.disableEndDummy();
                 }
-                currentHoveredTierRow = tierRow;
-                tierRow.activateEndDummy();
+                currentHoveredUnitRow = unitRow;
+                unitRow.activateEndDummy();
             } else {
-                tierRow.disableEndDummy();
+                unitRow.disableEndDummy();
             }
         }
     }
@@ -38,11 +38,11 @@ public class MediaCursor {
     }
 
     private MediaCursor() {
-        tierRows = new ArrayList<TierRow>();
+        unitRows = new ArrayList<UnitRow>();
     }
 
-    public void AddTierRow(TierRow tierRow) {
-        this.tierRows.add(tierRow);
+    public void AddUnitRow(UnitRow unitRow) {
+        this.unitRows.add(unitRow);
     }
     private Label label = new Label("super test");
 

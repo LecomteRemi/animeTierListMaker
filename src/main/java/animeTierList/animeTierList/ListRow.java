@@ -11,16 +11,16 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
-public class TierRow extends FlowPane implements UnitRow {
+public class ListRow extends HBox implements UnitRow {
     public List<Unit> mediaList;
 
     private boolean isEndDummyActivated = false;
     private Label dummy;
 
-    public TierRow(AnchorPane anchorPane) {
+    public ListRow(AnchorPane anchorPane) {
         MediaCursor.getInstance().AddUnitRow(this);
         dummy = new Label("dummy");
         dummy.setMinHeight(Unit.UNIT_HEIGHT);
@@ -31,11 +31,11 @@ public class TierRow extends FlowPane implements UnitRow {
         this.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
 
-        TierRow tierRow = this;
+        ListRow listRow = this;
         for (int i = 0; i < 10; i++) {
             Unit media = new Unit("media" + i);
             media.setAnchorPane(anchorPane);
-            media.SetRow(tierRow);
+            media.SetRow(listRow);
             // media.setMinHeight(100);
             // media.setOnMouseClicked(eventHandlerBox);
             mediaList.add(media);
