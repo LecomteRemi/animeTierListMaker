@@ -5,6 +5,7 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.HBox;
 
 public class Tier extends HBox {
+
     private TierLabel tierLabel;
     private TierRow tierRow;
 
@@ -13,6 +14,7 @@ public class Tier extends HBox {
 
     private int indexInList;
     private TierList tierList;
+    
 
     public TierList getTierList() {
         return tierList;
@@ -42,5 +44,9 @@ public class Tier extends HBox {
         this.setMinHeight(100);
         tierLabel.setMaxHeight(Double.MAX_VALUE);
         tierLabel.setPrefWidth(60);
+    }
+
+    public TierLabel getTierLabel() {
+        return tierLabel;
     }
 }

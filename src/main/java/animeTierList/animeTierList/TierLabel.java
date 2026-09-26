@@ -24,6 +24,8 @@ public class TierLabel extends HBox {
 
     private Tier tier;
 
+    public Color backGroundColor;
+
     public TierLabel(String label, Tier tier) {
         this.tier = tier;
 
@@ -46,16 +48,36 @@ public class TierLabel extends HBox {
         downButton.setOnMouseClicked(e -> {
             tier.getTierList().moveTierDown(tier.getIndexInList());
         });
+        optionButton.setOnMouseClicked(e -> {
+            tier.getTierList().getTierPropertiesMenu().EnableMenu(tier);
+        });
 
         this.getChildren().add(optionsBox);
         this.label = new Label(label);
         this.label.setMinWidth(width * 2);
         this.getChildren().add(this.label);
         this.setBorder(new Border(new BorderStroke(null, BorderStrokeStyle.SOLID, null, null)));
-        this.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        setBackGroundColor(Color.BLUE);
         this.label.setTextAlignment(TextAlignment.CENTER);
 
         this.setHgrow(optionsBox, Priority.ALWAYS);
         this.setHgrow(this.label, Priority.ALWAYS);
+    }
+
+    public Color getBackGroundColor() {
+        return backGroundColor;
+    }
+
+    public void setBackGroundColor(Color backGroundColor) {
+        this.backGroundColor = backGroundColor;
+        this.setBackground(new Background(new BackgroundFill(backGroundColor, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+
+    public String getLabel() {
+        return this.label.getText();
+    }
+
+    public void setLabel(String label) {
+        this.label.setText(label);
     }
 }
