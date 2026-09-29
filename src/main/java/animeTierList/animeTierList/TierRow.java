@@ -32,17 +32,14 @@ public class TierRow extends FlowPane implements UnitRow {
 
 
         TierRow tierRow = this;
-        for (int i = 0; i < 10; i++) {
-            Unit media = new Unit("media" + i);
-            media.setAnchorPane(anchorPane);
-            media.SetRow(tierRow);
-            // media.setMinHeight(100);
-            // media.setOnMouseClicked(eventHandlerBox);
-            mediaList.add(media);
-
-        }
-
-        System.out.println(mediaList.get(0).getMinWidth() * 10);
+        /*
+         * for (int i = 0; i < 10; i++) { Unit media = new Unit("media" + i);
+         * media.setAnchorPane(anchorPane); media.SetRow(tierRow); //
+         * media.setMinHeight(100); // media.setOnMouseClicked(eventHandlerBox);
+         * mediaList.add(media);
+         * 
+         * }
+         */
         this.getChildren().addAll(mediaList);
         this.setMinHeight(100);
 
@@ -70,6 +67,12 @@ public class TierRow extends FlowPane implements UnitRow {
     @Override
     public Node getNode() {
         return this;
+    }
+
+    public void removeUnit(Unit unit) {
+        if (mediaList.contains(unit)) {
+            mediaList.remove(unit);
+        }
     }
 
 }

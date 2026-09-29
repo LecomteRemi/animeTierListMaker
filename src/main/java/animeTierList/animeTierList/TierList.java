@@ -24,10 +24,11 @@ public class TierList extends VBox {
         this.anchorPane = anchorPane;
         tiers = new ArrayList<Tier>();
         for (int i = 0; i < 3; i++) {
-            Tier tier = new Tier("tier" + i, this, anchorPane);
-            getChildren().add(tier);
-            tiers.add(tier);
-            tier.setIndexInList(i);
+            /*
+             * Tier tier = new Tier("tier" + i, this, anchorPane); getChildren().add(tier);
+             * tiers.add(tier); tier.setIndexInList(i);
+             */
+            addNewTier();
         }
     }
 
@@ -47,14 +48,22 @@ public class TierList extends VBox {
         updateTierList();
     }
 
-    public void addNewTier(int idx) {
-        Tier tmp = new Tier("default", this, anchorPane);
+    public void addNewTier(String tierName, int idx) {
+        Tier tmp = new Tier(tierName, this, anchorPane);
         if (idx < tiers.size()) {
             tiers.add(idx, tmp);
         } else {
             tiers.add(tmp);
         }
         updateTierList();
+    }
+
+    public void addNewTier(int idx) {
+        addNewTier(getTierDefaultName(), idx);
+    }
+
+    public void addNewTier() {
+        addNewTier(tiers.size());
     }
 
     private void updateTierList() {
@@ -67,6 +76,7 @@ public class TierList extends VBox {
 
     public void deleteTier(int idx) {
         if (idx < tiers.size()) {
+            tiers.get(idx).deleteTier();
             tiers.remove(idx);
         }
         updateTierList();
@@ -74,5 +84,21 @@ public class TierList extends VBox {
 
     public int getTiersCount() {
         return tiers.size();
+    }
+
+    private String getTierDefaultName() {
+        String defaultName = "tier ";
+        int nb=0;
+        boolean tierNameAlreadyExist;
+        do {
+            nb++;
+            tierNameAlreadyExist=false;
+            for (Tier tier : tiers) {
+                if(tier.getTierLabel().getLabel().equals(defaultName+nb)) {
+                    tierNameAlreadyExist=true;
+                }
+            }
+        } while (tierNameAlreadyExist);
+        return defaultName + nb;
     }
 }

@@ -1,10 +1,16 @@
 package animeTierList.animeTierList;
 
+
+import java.awt.image.BufferedImage;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -14,6 +20,8 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
+
 
 public class Unit extends VBox {
     private Label title;
@@ -27,15 +35,35 @@ public class Unit extends VBox {
 
     private Label dummy;
 
+    private MediaData mediaData;
+
     public static final int UNIT_HEIGHT = 120;
     public static final int UNIT_WIDTH = 60;
     public void setAnchorPane(AnchorPane anchorPane) {
         this.anchorPane = anchorPane;
     }
 
-    public Unit(String title) {
-        this.title = new Label(title);
-        image = new ImageView("https://cdn.myanimelist.net/images/anime/2/28090l.jpg");
+    public Unit(MediaData mediaData) {
+        this.mediaData = mediaData;
+        this.title = new Label(mediaData.getOriginalName());
+        
+        /*
+         * String[] splitUrl = mediaData.getImageURL().split("\\."); if (splitUrl.length
+         * > 0 && splitUrl[splitUrl.length - 1].equals("webp")) {
+         * System.out.println("webp: " + this.mediaData.getOriginalName());
+         * System.out.println("webp: " + this.mediaData.getImageURL()); try {
+         * 
+         * BufferedImage bufferedImage = ImageIO.read(new
+         * File(mediaData.getImageURL())); this.image = new
+         * ImageView(convertToFxImage(bufferedImage));
+         * 
+         * } catch (IOException e) { // TODO Auto-generated catch block
+         * e.printStackTrace(); } }else {
+         */
+        image = new ImageView(mediaData.getImageURL());
+        // }
+
+        
 
         double ratio = image.getImage().getHeight() / image.getImage().getWidth();
         int width = UNIT_WIDTH;
@@ -103,6 +131,7 @@ public class Unit extends VBox {
                 row.getChildren().remove(dummy);
             } else {
                 if(MediaCursor.getInstance().getCurrentHoveredUnitRow() != null) {
+                    row.removeUnit(this);
                     row = MediaCursor.getInstance().getCurrentHoveredUnitRow();
                     row.addUnit(this);
                     row.disableEndDummy();
@@ -116,6 +145,21 @@ public class Unit extends VBox {
     
     public void SetRow(UnitRow row) {
         this.row = row;
+    }
+    
+    private static Image convertToFxImage(BufferedImage image) {
+        WritableImage wr = null;
+        if (image != null) {
+            wr = new WritableImage(image.getWidth(), image.getHeight());
+            PixelWriter pw = wr.getPixelWriter();
+            for (int x = 0; x < image.getWidth(); x++) {
+                for (int y = 0; y < image.getHeight(); y++) {
+                    pw.setArgb(x, y, image.getRGB(x, y));
+                }
+            }
+        }
+
+        return new ImageView(wr).getImage();
     }
 
 }

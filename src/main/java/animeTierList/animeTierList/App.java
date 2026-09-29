@@ -36,6 +36,7 @@ public class App extends Application {
         tierList.setMinWidth(800);
         tierList.setMaxWidth(800);
         ListRow listRow = new ListRow(anchorPane);
+        AllMediaList.getInstance().setDefaultRow(listRow);
         listRow.setMinWidth(616.5);
         ScrollPane scrollPane = new ScrollPane(listRow);
         scrollPane.setMaxWidth(616.5);
@@ -43,6 +44,9 @@ public class App extends Application {
         scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
         // scrollPane.setMaxWidth(Double.MAX_VALUE);
         scrollPane.setPrefViewportHeight(Unit.UNIT_HEIGHT);
+
+        SyncTable syncTable = new SyncTable();
+        container.getChildren().add(syncTable);
         container.getChildren().add(scrollPane);
         container.getChildren().add(tierList);
 
@@ -53,8 +57,12 @@ public class App extends Application {
         tierPropertiesMenu.setPrefSize(400, 400);
         tierPropertiesMenu.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, null, null)));
         var scene = new Scene(anchorPane, 640, 480);
+
+
+
         stage.setScene(scene);
         stage.show();
+
     }
 
     public static void main(String[] args) {

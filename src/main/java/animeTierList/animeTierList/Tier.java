@@ -1,7 +1,6 @@
 package animeTierList.animeTierList;
 
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.HBox;
 
 public class Tier extends HBox {
@@ -34,10 +33,8 @@ public class Tier extends HBox {
         this.tierRow = new TierRow(anchorePane);
 
 
-        System.out.println(BorderStroke.DEFAULT_WIDTHS.getLeft());
         width = 616.5; // (double) (MAX_UNIT_WIDTH)* ((double) Unit.UNIT_WIDTH +
                      // BorderStroke.DEFAULT_WIDTHS.getLeft() * 2.0);
-        System.out.println("width: " + width);
         tierRow.setPrefWidth(width);
         this.getChildren().add(tierLabel);
         this.getChildren().add(tierRow);
@@ -48,5 +45,13 @@ public class Tier extends HBox {
 
     public TierLabel getTierLabel() {
         return tierLabel;
+    }
+
+    public void deleteTier() {
+        for (Unit unit : tierRow.mediaList) {
+            this.tierRow.getChildren().remove(unit);
+            AllMediaList.getInstance().addBackToDefaultRow(unit);
+        }
+        this.tierRow.mediaList.clear();
     }
 }

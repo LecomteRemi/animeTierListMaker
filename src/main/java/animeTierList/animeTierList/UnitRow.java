@@ -13,4 +13,6 @@ public interface UnitRow {
     public void disableEndDummy();
 
     public Node getNode();
+
+    public void removeUnit(Unit unit);
 }
