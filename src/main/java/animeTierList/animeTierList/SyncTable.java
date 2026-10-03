@@ -16,10 +16,18 @@ public class SyncTable extends VBox {
         usernameTextField.setPromptText("username");
         syncButton.setOnMouseClicked(e -> {
             AllMediaList.getInstance().getDefaultRow().syncMedia(usernameTextField.getText());
+
+        });
+        clearButton = new Button("clear");
+        clearButton.setOnMouseClicked(e -> {
+            for (UnitRow unitRow : AllMediaList.getInstance().getAllRows()) {
+                unitRow.clear();
+            }
         });
         HBox hbox = new HBox();
         hbox.getChildren().add(usernameTextField);
         hbox.getChildren().add(syncButton);
+        hbox.getChildren().add(clearButton);
         this.getChildren().add(hbox);
     }
 }

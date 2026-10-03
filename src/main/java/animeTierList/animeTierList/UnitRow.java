@@ -8,11 +8,21 @@ public interface UnitRow {
 
     public void addUnit(Unit unit);
 
-    public void activateEndDummy();
+    public void enableEndDummy();
 
     public void disableEndDummy();
 
     public Node getNode();
 
     public void removeUnit(Unit unit);
+
+    public void replaceUnitByDummy(Unit unit);
+
+    public void replaceDummyByUnit(Unit unit);
+
+    public void disableReplacementDummy(Unit replacedUnit);
+
+    public boolean containsUnit(Unit unit);
+
+    public void clear();
 }

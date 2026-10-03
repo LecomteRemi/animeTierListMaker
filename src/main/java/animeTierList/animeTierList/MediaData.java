@@ -2,7 +2,25 @@ package animeTierList.animeTierList;
 
 import java.util.Objects;
 
+import javafx.scene.image.Image;
+
 public class MediaData {
+
+    private String originalName;
+    private String englishName;
+    private String imageURL;
+    private Image image;
+    private int id;
+
+    public MediaData(MediaType mediaType, int id, String originalName, String englishName, String imageURL) {
+        this.mediaType = mediaType;
+        this.originalName = originalName;
+        this.englishName = englishName;
+        this.imageURL = imageURL;
+        this.id = id;
+        this.image = new Image(imageURL);
+
+    }
 
     @Override
     public int hashCode() {
@@ -43,17 +61,8 @@ public class MediaData {
         return id;
     }
 
-    private String originalName;
-    private String englishName;
-    private String imageURL;
-    private int id;
-
-    public MediaData(MediaType mediaType, int id, String originalName, String englishName, String imageURL) {
-        this.mediaType = mediaType;
-        this.originalName = originalName;
-        this.englishName = englishName;
-        this.imageURL = imageURL;
-        this.id = id;
+    public Image getImage() {
+        return image;
     }
 
 }

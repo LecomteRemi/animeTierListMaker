@@ -23,7 +23,7 @@ public class MediaCursor {
                     currentHoveredUnitRow.disableEndDummy();
                 }
                 currentHoveredUnitRow = unitRow;
-                unitRow.activateEndDummy();
+                unitRow.enableEndDummy();
             } else {
                 unitRow.disableEndDummy();
             }

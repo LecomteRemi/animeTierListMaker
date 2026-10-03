@@ -52,6 +52,7 @@ public class Tier extends HBox {
             this.tierRow.getChildren().remove(unit);
             AllMediaList.getInstance().addBackToDefaultRow(unit);
         }
+        AllMediaList.getInstance().getAllRows().remove(this.tierRow);
         this.tierRow.mediaList.clear();
     }
 }

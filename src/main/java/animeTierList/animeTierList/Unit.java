@@ -1,16 +1,11 @@
 package animeTierList.animeTierList;
 
 
-import java.awt.image.BufferedImage;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -33,19 +28,21 @@ public class Unit extends VBox {
     private UnitRow row;
     private AnchorPane anchorPane;
 
-    private Label dummy;
 
     private MediaData mediaData;
 
+
     public static final int UNIT_HEIGHT = 120;
     public static final int UNIT_WIDTH = 60;
+
+    private boolean wasMouseDragged = false;
     public void setAnchorPane(AnchorPane anchorPane) {
         this.anchorPane = anchorPane;
     }
 
-    public Unit(MediaData mediaData) {
-        this.mediaData = mediaData;
-        this.title = new Label(mediaData.getOriginalName());
+    public Unit() {
+        this.title = new Label();
+        this.image = new ImageView();
         
         /*
          * String[] splitUrl = mediaData.getImageURL().split("\\."); if (splitUrl.length
@@ -60,16 +57,9 @@ public class Unit extends VBox {
          * } catch (IOException e) { // TODO Auto-generated catch block
          * e.printStackTrace(); } }else {
          */
-        image = new ImageView(mediaData.getImageURL());
         // }
 
-        
 
-        double ratio = image.getImage().getHeight() / image.getImage().getWidth();
-        int width = UNIT_WIDTH;
-        double height = ratio * width;
-        image.setFitHeight(height);
-        image.setFitWidth(width);
 
         this.getChildren().add(image);
         this.getChildren().add(this.title);
@@ -82,16 +72,12 @@ public class Unit extends VBox {
         this.setBorder(new Border(new BorderStroke(null, BorderStrokeStyle.SOLID, null, null)));
         this.setOnMousePressed(mouseEvent -> {
 
-            if (row != null && row.getChildren().contains(this)) {
-                int unitIndex = row.getChildren().indexOf(this);
-                dummy = new Label();
-                dummy.setMinSize(
-                        UNIT_WIDTH + BorderStroke.DEFAULT_WIDTHS.getRight(),
-                        UNIT_HEIGHT);
+            if (row != null && row.containsUnit(this)) {
 
                 Point2D point = this.localToScene(this.getLayoutX(), this.getLayoutY());
-                row.getChildren().add(unitIndex, dummy);
-                row.getChildren().remove(this);
+                row.replaceUnitByDummy(this);
+                // row.getChildren().add(unitIndex, dummy);
+                // row.getChildren().remove(this);
                 anchorPane.getChildren().add(this);
 
                 this.setViewOrder(2);
@@ -111,26 +97,25 @@ public class Unit extends VBox {
             }
             mouseAnchorX = mouseEvent.getX();
             mouseAnchorY = mouseEvent.getY();
+            wasMouseDragged = false;
+
+            ReviewMenu.getInstance().displayReview(mediaData);
         });
         this.setOnMouseDragged(mouseEvent -> {
-            if (dummy != null) {
-                row.getChildren().remove(dummy);
-                dummy = null;
-            }
+            row.disableReplacementDummy(this);
             this.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
             this.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
             MediaCursor.getInstance().checkTierRowsMouseLocation(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+            wasMouseDragged = true;
         });
         this.setOnMouseReleased(mouseEvent -> {
-            if (dummy != null) {
 
-                anchorPane.getChildren().remove(this);
-                int unitIndex = row.getChildren().indexOf(dummy);
-
-                row.getChildren().add(unitIndex, this);
-                row.getChildren().remove(dummy);
+            anchorPane.getChildren().remove(this);
+            if (!wasMouseDragged) {
+                row.replaceDummyByUnit(this);
+                System.out.println("ok111");
             } else {
-                if(MediaCursor.getInstance().getCurrentHoveredUnitRow() != null) {
+                if (MediaCursor.getInstance().getCurrentHoveredUnitRow() != null) {
                     row.removeUnit(this);
                     row = MediaCursor.getInstance().getCurrentHoveredUnitRow();
                     row.addUnit(this);
@@ -143,23 +128,23 @@ public class Unit extends VBox {
         });
     }
     
-    public void SetRow(UnitRow row) {
+    public void setMediaData(MediaData mediaData) {
+        this.mediaData = mediaData;
+        image.setImage(mediaData.getImage());
+        this.title.setText(mediaData.getOriginalName());
+        double ratio = image.getImage().getHeight() / image.getImage().getWidth();
+        int width = UNIT_WIDTH;
+        double height = ratio * width;
+        image.setFitHeight(height);
+        image.setFitWidth(width);
+    }
+
+    public void setRow(UnitRow row) {
         this.row = row;
     }
-    
-    private static Image convertToFxImage(BufferedImage image) {
-        WritableImage wr = null;
-        if (image != null) {
-            wr = new WritableImage(image.getWidth(), image.getHeight());
-            PixelWriter pw = wr.getPixelWriter();
-            for (int x = 0; x < image.getWidth(); x++) {
-                for (int y = 0; y < image.getHeight(); y++) {
-                    pw.setArgb(x, y, image.getRGB(x, y));
-                }
-            }
-        }
 
-        return new ImageView(wr).getImage();
+    public MediaData getMediaData() {
+        return mediaData;
     }
 
 }

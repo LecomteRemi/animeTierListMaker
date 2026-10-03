@@ -17,8 +17,10 @@ import javafx.scene.paint.Color;
 public class TierRow extends FlowPane implements UnitRow {
     public List<Unit> mediaList;
 
-    private boolean isEndDummyActivated = false;
+    private boolean isEndDummyEnabled = false;
+    private boolean isReplacementDummyEnabled = false;
     private Label dummy;
+
 
     public TierRow(AnchorPane anchorPane) {
         MediaCursor.getInstance().AddUnitRow(this);
@@ -43,18 +45,20 @@ public class TierRow extends FlowPane implements UnitRow {
         this.getChildren().addAll(mediaList);
         this.setMinHeight(100);
 
+        AllMediaList.getInstance().getAllRows().add(this);
+
     }
 
-    public void activateEndDummy() {
-        if (!isEndDummyActivated) {
-            isEndDummyActivated = true;
+    public void enableEndDummy() {
+        if (!isEndDummyEnabled) {
+            isEndDummyEnabled = true;
             this.getChildren().add(dummy);
         }
     }
 
     public void disableEndDummy() {
-        if (isEndDummyActivated) {
-            isEndDummyActivated = false;
+        if (isEndDummyEnabled) {
+            isEndDummyEnabled = false;
             this.getChildren().remove(dummy);
         }
     }
@@ -73,6 +77,50 @@ public class TierRow extends FlowPane implements UnitRow {
         if (mediaList.contains(unit)) {
             mediaList.remove(unit);
         }
+    }
+
+    @Override
+    public void replaceUnitByDummy(Unit unit) {
+        if (!isReplacementDummyEnabled) {
+            if (mediaList.contains(unit)) {
+                int idx = this.getChildren().indexOf(unit);
+                this.getChildren().add(idx, dummy);
+                this.getChildren().remove(unit);
+                isReplacementDummyEnabled = true;
+            }
+        }
+
+    }
+
+    @Override
+    public void replaceDummyByUnit(Unit unit) {
+        if (isReplacementDummyEnabled) {
+            if (mediaList.contains(unit)) {
+                int idx = this.getChildren().indexOf(dummy);
+                this.getChildren().add(idx, unit);
+                this.getChildren().remove(dummy);
+                isReplacementDummyEnabled = false;
+            }
+        }
+
+    }
+
+    public void disableReplacementDummy(Unit replacedUnit) {
+        if (isReplacementDummyEnabled) {
+            isReplacementDummyEnabled = false;
+            this.getChildren().remove(dummy);
+
+        }
+    }
+
+    @Override
+    public boolean containsUnit(Unit unit) {
+        return this.getChildren().contains(unit);
+    }
+
+    public void clear() {
+        this.getChildren().removeAll(mediaList);
+        mediaList.clear();
     }
 
 }
